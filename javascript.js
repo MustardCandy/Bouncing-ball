@@ -1,50 +1,30 @@
-var canvas = document.getElementById("myCanvas");
-// ^^^ {id: "myCanvas", width: 400, height: 200} made from the html
-var context = canvas.getContext("2d");
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+var x = c.width/2;
+var y = c.height-30;
+var dx = 2;
+var dy = -2;
+var ballRadius = 10;
 
-//var controler = setInterval(circleFunctionNoClear, 100);
-
-// function for inside the inside function
-function circleFunctionNoClear(){
-  var rad = Math.floor(Math.random() * 50);
-  var maxX = canvas.width - (rad * 2);
-  var maxY = canvas.height - (rad * 2);
-  var xVal = Math.floor(Math.random() * maxX) + rad;
-  var yVal = Math.floor(Math.random() * maxY) + rad;
-  context.beginPath();
-  context.arc(xVal, yVal, rad, 0, 2 * Math.PI);
-  context.stroke();
+  function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, 10, 0, Math.PI*2);
+    ctx.fill();
+    ctx.closePath();
 }
 
-function squareFunctionNoClear(){
-  var width = Math.floor(Math.random() * 100);
-  var maxX = canvas.width - (width);
-  var maxY = canvas.height - (width);
-  var xVal = Math.floor(Math.random() * maxX);
-  var yVal = Math.floor(Math.random() * maxY);
-  context.beginPath();
-  context.rect(xVal, yVal, width, width);
-  context.stroke();
+function draw() {
+  ctx.clearRect(0, 0, c.width, c.height);
+    drawBall();
+
+    if(x + dx > c.width-ballRadius || x + dx < ballRadius) {
+       dx = -dx;
+   }
+   if(y + dy > c.height-ballRadius || y + dy < ballRadius) {
+       dy = -dy;
+   }
+    x += dx;
+    y += dy;
 }
 
-
-// fancy loop getaround for animating
-function circles(){
-  var interval = setInterval(step, 100);
-  var counter = 0;
-
-  function step(){ // this is within the circles namespace
-    if ((counter % 20) == 0) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    if ((counter % 2) == 0){
-      circleFunctionNoClear();
-    }
-    else {
-      squareFunctionNoClear();
-    }
-    counter ++;
-  }
-}
-
-circles();
+setInterval(draw, 10); 
